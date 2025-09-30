@@ -1,103 +1,142 @@
-import Image from "next/image";
+"use client"
+import Navbar from "./components/Navbar";
+import Card from "./components/Card";
+import { TrendingUp, DollarSign, ChartNoAxesCombined, BriefcaseBusiness, Trash2 } from "lucide-react";
+import HeroSection from "./components/HeroSection";
+import Footer from "./components/Footer";
+import AddBusinessModal from "./components/AddBusinessModal";
+import RemoveBusinessModal from "./components/RemoveBusinessModal";
+import SalesExpensesModal from "./components/SalesExpensesModal";
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false)
+  const [isSalesExpensesModalOpen, setIsSalesExpensesModalOpen] = useState(false)
+  const [error, setError] = useState(null)
+  const [addBusinessFormData, setAddBusinessFormData] = useState({
+    businessName: "",
+    initialInvestment: "",
+    trackDays: "",
+    startDate: ""
+  })
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  const router = useRouter()
+
+  const handleChange = (e) => {
+    setAddBusinessFormData({
+      ...addBusinessFormData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  
+  const handleSubmit = async(e) => {
+    e.preventDefault()
+    console.log(addBusinessFormData);
+    
+    
+    if(!addBusinessFormData.businessName || !addBusinessFormData.initialInvestment || !addBusinessFormData.trackDays || !addBusinessFormData.startDate){
+      return alert("All fields are mandatory")
+    }
+  try {
+    const response = await fetch('/api/add-business', {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({...addBusinessFormData})
+    })
+
+    const data = await response.json()
+
+    if(!response.ok){
+      setError(data.message || 'Failed to add data');
+      console.log(data.message);
+      
+      return alert(data.message || "failed to insert")
+    }
+    router.push('/profit-loss')
+    return alert("Business added sucessfully")
+  } catch (err) {
+    setError(err || "Something went wrong")
+    console.log(error);
+    
+  }
+  
+}
+  return (
+    <>
+      <Navbar />
+      <HeroSection onStartTracking={() => setIsAddModalOpen(true)} />
+
+      {/* Cards Section */}
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div onClick={() => setIsAddModalOpen(true) } className="cursor-pointer">
+            <Card
+              icon={<BriefcaseBusiness className="text-blue-600" size={28} />}
+              title="Add New Business"
+              description="Add new businesses to track."
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
+          <div onClick={() => setIsSalesExpensesModalOpen(true)} className="cursor-pointer">
+            <Card
+              icon={<DollarSign className="text-blue-600" size={28} />}
+              title="Sales & Expenses"
+              description="Add your today's sales and expenses to track."
+            />
+          </div>
+          <Link href={`/profit-loss`}>
+            <Card
+              icon={<TrendingUp className="text-blue-600" size={28} />}
+              title="Profit / Loss"
+              description="Check till now you are in profits or losses."
+            />
+          </Link>
+          <Link href={`/graph-view`}>
+            <Card
+              icon={<ChartNoAxesCombined className="text-blue-600" size={28} />}
+              title="Graph View"
+              description="Check your business data in graph view."
+            />
+          </Link>
+
+          <div onClick={() => setIsRemoveModalOpen(true) } className="cursor-pointer">
+            <Card
+              icon={<Trash2 className="text-blue-600" size={28} />}
+              title="Remove Business"
+              description="If tracking is completed, you can remove."
+            />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+
+      <Footer />
+
+      {/* IsAddModalForm open */}
+      <AddBusinessModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        businessName={addBusinessFormData.businessName}
+        initialInvestment={addBusinessFormData.initialInvestment}
+        trackDays={addBusinessFormData.trackDays}
+        startDate={addBusinessFormData.startDate}
+        onSubmit={handleSubmit}
+        onChange={handleChange}
+      />
+
+      {/* IsAddModalForm open */}
+      <RemoveBusinessModal
+        isOpen={isRemoveModalOpen}
+        onClose={() => setIsRemoveModalOpen(false)}
+      />
+
+      {/* IsSalesExpensesModalForm open */}
+      <SalesExpensesModal
+        isOpen={isSalesExpensesModalOpen}
+        onClose={() => setIsSalesExpensesModalOpen(false)}
+      />
+    </>
   );
 }
