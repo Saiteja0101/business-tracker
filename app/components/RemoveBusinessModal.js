@@ -1,15 +1,14 @@
-// app/components/RemoveBusinessModal.js
 "use client";
 import { X } from "lucide-react";
 import { useState } from "react";
 
 export default function RemoveBusinessModal({ isOpen, onClose }) {
-  if (!isOpen) return null;
   const [formData, setFormData] = useState({
     businessName: "",
     profilePassword: ""
   })
-
+  if (!isOpen) return null;
+  
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
