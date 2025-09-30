@@ -3,18 +3,18 @@ import { X } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function SalesExpensesModal({ isOpen, onClose }) {
-  if (!isOpen) return null;
   const [businesses, setBusinesses] = useState([])
   const [selectedBusiness, setSelectedBusiness] = useState('')
   // default today’s date
   const today = new Date().toISOString().split("T")[0];
-
+  
   const [formData, setFormData] = useState({
     sales: "",
     expenses: "",
     date: today,
   });
-
+  
+  if (!isOpen) return null;
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
