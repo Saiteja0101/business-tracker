@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -41,7 +42,7 @@ export default function Navbar() {
           <div className="space-x-2 text-xl font-bold text-gray-800">
             <Link href="/" 
             className="flex items-center gap-1 font-serif">
-            <img
+            <Image
               src="/business-tracker_logo.png"
               alt="business tracker logo"
               className="h-8 w-8"
