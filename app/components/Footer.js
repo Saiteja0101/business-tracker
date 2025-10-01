@@ -3,7 +3,7 @@ import { Github, Twitter, Linkedin } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 text-gray-300 py-8 mt-12">
+    <footer className="bg-gray-900 text-gray-300 py-8 mt-12">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between">
         
         {/* Left - App Info */}
@@ -16,13 +16,19 @@ export default function Footer() {
 
         {/* Right - Social Icons */}
         <div className="flex space-x-6">
-          <a href="#" className="hover:text-white">
+          <a 
+          href="https://github.com/Saiteja0101" 
+          className="hover:text-white">
             <Github size={24} />
           </a>
-          <a href="#" className="hover:text-white">
+          <a 
+          href="https://x.com/chippa60913?t=P6rk111V1gJhpC7jXd5jwg&s=09" 
+          className="hover:text-white">
             <Twitter size={24} />
           </a>
-          <a href="#" className="hover:text-white">
+          <a 
+          href="https://www.linkedin.com/in/saiteja-chippa-90488a28b/" 
+          className="hover:text-white">
             <Linkedin size={24} />
           </a>
         </div>

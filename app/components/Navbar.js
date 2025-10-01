@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,7 +14,7 @@ export default function Navbar() {
     // Check auth status from API
     async function checkAuth() {
       try {
-        const res = await fetch("/api/me", { cache: "no-store" }); 
+        const res = await fetch("/api/me", { cache: "no-store" });
         if (res.ok) {
           setIsLoggedIn(true);
         } else {
@@ -37,8 +38,16 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Left Side - Title */}
-          <div className="text-xl font-bold text-gray-800">
-            Business Tracker
+          <div className="space-x-2 text-xl font-bold text-gray-800">
+            <Link href="/" 
+            className="flex items-center gap-1 font-serif">
+            <img
+              src="/business-tracker_logo.png"
+              alt="business tracker logo"
+              className="h-8 w-8"
+            />
+              Business Tracker
+            </Link>
           </div>
 
           {/* Right Side - Desktop */}
