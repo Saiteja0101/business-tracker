@@ -45,7 +45,8 @@ export default function Navbar() {
             <Image
               src="/business-tracker_logo.png"
               alt="business tracker logo"
-              className="h-8 w-8"
+              width={30}
+              height={30}
             />
               Business Tracker
             </Link>
@@ -54,12 +55,20 @@ export default function Navbar() {
           {/* Right Side - Desktop */}
           <div className="hidden md:flex space-x-4">
             {!isLoggedIn ? (
+              <div>
               <button
                 onClick={() => router.push("/login")}
                 className="bg-black border-2 border-black text-gray-50 font-semibold px-4 py-2 rounded-lg hover:bg-gray-50 hover:text-black transition duration-300"
               >
                 Sign in
               </button>
+              <button
+                onClick={() => router.push("/signup")}
+                className="bg-gray-50 border-2 border-black text-black font-semibold px-4 py-2 ml-2 rounded-lg hover:bg-black hover:text-gray-50 transition duration-300"
+              >
+                Sign up
+              </button>  
+              </div>
             ) : (
               <button
                 onClick={handleLogout}
@@ -86,12 +95,22 @@ export default function Navbar() {
       {menuOpen && (
         <div className="md:hidden bg-white shadow-lg p-4 space-y-2 grid text-center">
           {!isLoggedIn ? (
+            <div>
             <button
               onClick={() => router.push("/login")}
               className="w-full bg-black border-2 border-black text-gray-50 px-4 py-2 rounded-lg hover:bg-gray-50 transition duration-300"
             >
               Sign in
             </button>
+
+            <button
+              onClick={() => router.push("/signup")}
+              className="w-full bg-gray-50 border-2 border-black text-black px-4 py-2 mt-2 rounded-lg hover:text-gray-50 hover:bg-black-gray-50 transition duration-300"
+            >
+              Sign up
+            </button>
+
+            </div>
           ) : (
             <button
               onClick={handleLogout}
