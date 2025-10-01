@@ -3,60 +3,63 @@ import { X } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function SalesExpensesModal({ isOpen, onClose }) {
-  const [businesses, setBusinesses] = useState([])
-  const [selectedBusiness, setSelectedBusiness] = useState('')
+  const [businesses, setBusinesses] = useState([]);
+  const [selectedBusiness, setSelectedBusiness] = useState("");
+
   // default today’s date
   const today = new Date().toISOString().split("T")[0];
-  
+
   const [formData, setFormData] = useState({
     sales: "",
     expenses: "",
     date: today,
   });
-  
-  if (!isOpen) return null;
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();    
-    onClose()
+    e.preventDefault();
+    onClose();
     console.log("Submitted:", formData);
-    const payload = {...formData, businessId: selectedBusiness}
+    const payload = { ...formData, businessId: selectedBusiness };
     try {
-      const response = await fetch('/api/sales-expenses', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      const data = await response.json()
+      const response = await fetch("/api/sales-expenses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
 
       if (!response.ok) {
         console.log(data.error);
-        alert(data.message || "Failed to Add sales & expenses")
-        return
+        alert(data.message || "Failed to Add sales & expenses");
+        return;
       }
-      return alert("Added sales & expenses")
+      return alert("Added sales & expenses");
     } catch (err) {
       console.log(err.message);
-      return alert(err.message || "Something went wrong")
+      return alert(err.message || "Something went wrong");
     }
-
-
   };
+
   useEffect(() => {
     if (isOpen) {
-      fetch('/api/businesses')
-        .then(res => res.json())
-        .then(data => setBusinesses(data.businesses))
+      fetch("/api/businesses")
+        .then((res) => res.json())
+        .then((data) => setBusinesses(data.businesses));
     }
-  }, [isOpen])
+  }, [isOpen]);
+
+  // instead of "if (!isOpen) return null;"
+  if (!isOpen) {
+    return <></>; // or just return null safely AFTER hooks
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-6 relative">
-
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -69,6 +72,7 @@ export default function SalesExpensesModal({ isOpen, onClose }) {
         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           Add Sales & Expenses
         </h2>
+
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -89,9 +93,10 @@ export default function SalesExpensesModal({ isOpen, onClose }) {
               ))}
             </select>
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Today's Sales
+              Today&apos;s Sales
             </label>
             <input
               type="number"
@@ -107,7 +112,7 @@ export default function SalesExpensesModal({ isOpen, onClose }) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Today's Expenses
+              Today&apos;s Expenses
             </label>
             <input
               type="number"
