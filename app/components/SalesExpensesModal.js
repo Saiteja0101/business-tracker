@@ -52,7 +52,6 @@ export default function SalesExpensesModal({ isOpen, onClose }) {
     }
   }, [isOpen]);
 
-  // instead of "if (!isOpen) return null;"
   if (!isOpen) {
     return <></>; // or just return null safely AFTER hooks
   }
